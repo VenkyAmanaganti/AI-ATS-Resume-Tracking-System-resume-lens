@@ -20,105 +20,142 @@ Resume Lens compares a candidate resume with a job description using Gemini thro
 
 Supported resume formats are PDF, DOCX, and TXT. The application sends the extracted resume text and job description to Gemini for analysis.
 
-# Resume Lens 🔍
+# 📄 Resume Lens — AI-Powered Resume Screening
 
-Evidence-based resume screening powered by LangChain and Google Gemini.
+Resume Lens is an **AI-powered resume screening application** built with **Python, Streamlit, LangChain, and Google Gemini**.
 
-## Overview
+It compares a candidate's resume with a provided job description and generates an evidence-based report containing a **match score, strengths, gaps, supporting evidence, and interview focus areas**.
 
-Resume Lens is a Streamlit app that compares a candidate's resume against a job description and returns a structured, evidence-backed screening report. It's built to support — not replace — human recruiting judgment: it cites evidence from the resume, avoids inferring protected characteristics, and never renders a final hiring decision.
+The application supports **PDF, DOCX, and TXT** resume formats.
 
-## Features
+---
 
-- **Multi-format resume parsing** — PDF, DOCX, and TXT support
-- **Evidence-based screening** — Gemini compares resume text to the job description using only the supplied evidence
-- **Structured markdown report** — every analysis returns the same five sections: Match Score, Strengths, Gaps, Evidence, Interview Focus
-- **Bias-aware prompting** — the system prompt explicitly avoids inferring protected characteristics and treats missing information as "unknown" rather than a weakness
-- **Configurable model** — swap Gemini models via an environment variable without touching code
+## 🚀 Features
 
-## Tech Stack
+- 📄 Upload resumes in **PDF, DOCX, or TXT** format
+- 📝 Paste a job description
+- 🤖 Analyze resumes using **Google Gemini**
+- 🔗 Use **LangChain** for prompt management and model interaction
+- 📊 Generate an overall **resume-job match percentage**
+- 💪 Identify candidate **strengths**
+- ⚠️ Identify **gaps** based only on supplied evidence
+- 🔍 Provide supporting **evidence from the resume**
+- 🎯 Generate **interview focus areas**
+- 🛡️ Evidence-based screening without making a final hiring decision
+- 🖥️ Simple and interactive **Streamlit UI**
 
-| Layer | Tool |
-|---|---|
-| UI | [Streamlit](https://streamlit.io/) |
-| Prompt orchestration | [LangChain](https://python.langchain.com/) (`ChatPromptTemplate`) |
-| LLM | [Gemini](https://ai.google.dev/) via `langchain-google-genai` |
-| PDF parsing | [pypdf](https://pypdf.readthedocs.io/) |
-| DOCX parsing | [python-docx](https://python-docx.readthedocs.io/) |
-| Config | [python-dotenv](https://pypi.org/project/python-dotenv/) |
+---
 
-## Project Structure
+## 🛠️ Tech Stack
 
+| TechnologyPurpose |                                       |
+| ----------------- | ------------------------------------- |
+| Python            | Application development               |
+| Streamlit         | Web application interface             |
+| Google Gemini     | AI-powered resume analysis            |
+| LangChain         | LLM integration and prompt management |
+| PyPDF             | Extract text from PDF resumes         |
+| python-docx       | Extract text from DOCX resumes        |
+| python-dotenv     | Manage environment variables          |
+
+---
+
+## 🏗️ Project Architecture
+```vbnet
+Resume Lens
+│
+├── Resume Upload
+│   ├── PDF
+│   ├── DOCX
+│   └── TXT
+│
+├── Text Extraction
+│
+├── Job Description
+│
+├── LangChain Prompt
+│
+├── Google Gemini
+│
+└── AI Screening Report
+    ├── Match Score
+    ├── Strengths
+    ├── Gaps
+    ├── Evidence
+    └── Interview Focus
+```
+
+---
+
+## 📂 Project Structure
 ```
 resume-lens/
-├── app.py              # Main Streamlit application
-├── .env                # Environment variables (not committed)
-└── requirements.txt    # Python dependencies
+│
+├── app.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── README.md
 ```
 
-## Getting Started
+> Rename your Python file to `app.py` if you want to follow this structure.
 
-### Prerequisites
+---
 
-- Python 3.9+
-- A Google Gemini API key ([get one here](https://ai.google.dev/))
+## ⚙️ Installation
 
-### Installation
-
+### 1. Clone the repository
 ```bash
-git clone https://github.com/VenkyAmanaganti/resume-lens.git
+git clone https://github.com/your-username/resume-lens.git
+```
+
+Move into the project directory:
+```
 cd resume-lens
+```
+
+### 2. Create a virtual environment
+```
 python -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
+```
+
+Activate it on Windows:
+```
+venv\Scripts\activate
+```
+
+### 3. Install dependencies
+```
 pip install -r requirements.txt
 ```
 
-### Configuration
+---
+
+## 🔑 Configure Gemini API Key
 
 Create a `.env` file in the project root:
-
-```
-GOOGLE_API_KEY=your_gemini_api_key_here
+```ini
+GOOGLE_API_KEY=your_gemini_api_key
 GEMINI_MODEL=gemini-3.6-flash
 ```
 
-`GEMINI_MODEL` is optional and defaults to `gemini-3.6-flash` if not set.
+Get your Gemini API key from **Google AI Studio**.
 
-### Running the app
+⚠️ **Never upload your&#x20;****`.env`****&#x20;file or API key to GitHub.**
 
-```bash
-streamlit run app.py
+Add this to `.gitignore`:
+```
+.env
+venv/
+__pycache__/
+*.pyc
 ```
 
-The app opens at `http://localhost:8501`.
+---
 
-## How It Works
+## 📦 requirements.txt
 
-1. Upload a resume (PDF, DOCX, or TXT) in the sidebar.
-2. Paste the job description into the text area.
-3. Click **Analyze resume**.
-4. The app extracts plain text from the resume, sends it to Gemini alongside the job description using a screening-focused system prompt, and renders the structured report inline.
-
-## Report Structure
-
-Every analysis returns markdown with five fixed headings:
-
-| Section | Description |
-|---|---|
-| **Match Score** | Whole-number percentage, with a brief explanation of the score |
-| **Strengths** | Candidate strengths backed by resume evidence |
-| **Gaps** | Requirements the resume doesn't clearly meet |
-| **Evidence** | Specific details pulled from the resume supporting the assessment |
-| **Interview Focus** | Suggested areas to probe further in an interview |
-
-## Design Principles
-
-- **Evidence-only** — the model is instructed to rely solely on the supplied resume and job description, not assumptions.
-- **Bias-aware** — the system prompt explicitly avoids inferring protected characteristics and stops short of a hiring recommendation.
-- **Fair to missing data** — information the resume doesn't cover is flagged as "unknown" rather than counted against the candidate.
-
-## Requirements
-
+Create a `requirements.txt` file with:
 ```
 streamlit
 python-dotenv
@@ -128,18 +165,229 @@ pypdf
 python-docx
 ```
 
-## Roadmap Ideas
+You can also generate it from your environment:
+```
+pip freeze > requirements.txt
+```
 
-- Batch screening for multiple resumes at once
-- Exportable PDF/DOCX report
-- Support for additional LLM providers
+---
 
-## License
+## ▶️ Run the Application
 
-MIT — feel free to update this section to match your preferred license.
+Start the Streamlit application:
+```
+streamlit run app.py
+```
 
-## Author
+Streamlit will start the application locally.
 
-**Venkatesh** (Amanaganti Venkateswarlu)
-- GitHub: [@VenkyAmanaganti](https://github.com/VenkyAmanaganti)
-- LinkedIn: [amanagantivenkateswarlu](https://www.linkedin.com/in/amanagantivenkateswarlu)
+Open the displayed local URL in your browser.
+
+---
+
+## 🧑‍💻 How to Use
+
+### Step 1 — Upload Resume
+
+Upload a candidate resume in one of the supported formats:
+```
+PDF
+DOCX
+TXT
+```
+
+### Step 2 — Enter Job Description
+
+Paste the job description into the job description field.
+
+For example:
+```sql
+We are looking for a Data Analyst with experience in
+Python, SQL, Excel, Power BI, data visualization,
+and statistical analysis.
+```
+
+### Step 3 — Analyze Resume
+
+Click:
+```
+Analyze resume
+```
+
+### Step 4 — Review AI Report
+
+Resume Lens generates:
+```
+Match Score
+Strengths
+Gaps
+Evidence
+Interview Focus
+```
+
+---
+
+## 📊 Example Output
+```markdown
+## Match Score
+
+82%
+
+The resume demonstrates strong alignment with the
+technical requirements of the role.
+
+## Strengths
+
+- Strong SQL experience
+- Python knowledge
+- Experience with Power BI
+- Data analysis experience
+
+## Gaps
+
+- Statistical modeling experience is unknown
+- Advanced Excel experience is not clearly stated
+
+## Evidence
+
+- SQL mentioned in technical skills
+- Power BI projects included in the resume
+- Python used for data analysis
+
+## Interview Focus
+
+- SQL joins and window functions
+- Python data analysis
+- Power BI dashboards
+- Data cleaning techniques
+```
+
+---
+
+## 🧠 How It Works
+
+The application follows these steps:
+
+### 1. Resume Upload
+
+The user uploads a resume.
+
+### 2. Text Extraction
+
+The application extracts readable text using:
+
+- `PyPDF` for PDF
+- `python-docx` for DOCX
+- Python file decoding for TXT
+
+### 3. Job Description Input
+
+The recruiter or user provides the job description.
+
+### 4. Prompt Creation
+
+LangChain creates a structured prompt containing:
+```
+Job Description
++
+Resume
+```
+
+### 5. Gemini Analysis
+
+Google Gemini analyzes the resume against the job requirements.
+
+### 6. Structured Report
+
+The model returns:
+```
+Match Score
+Strengths
+Gaps
+Evidence
+Interview Focus
+```
+
+---
+
+## 🔐 Responsible AI
+
+Resume Lens is designed to provide **evidence-based screening assistance**.
+
+The AI is instructed to:
+
+- Use only information supplied in the resume and job description
+- Avoid inferring protected characteristics
+- Avoid making a final hiring decision
+- Treat missing information as **unknown**
+- Explain the reasoning behind the match score
+
+The tool should be used as an **assistive screening tool**, not as the sole basis for employment decisions.
+
+---
+
+## 🔮 Future Improvements
+
+Possible future enhancements include:
+
+- 📊 Resume scoring dashboard
+- 📥 Download analysis as PDF
+- 📑 Compare multiple resumes
+- 🗂️ Resume history
+- 📈 Candidate ranking dashboard
+- 🔎 Keyword and skill extraction
+- 🎯 Job-specific skill matching
+- 📊 Visual match-score charts
+- 🧠 Semantic similarity using embeddings
+- 🗃️ Resume database
+- 🔐 User authentication
+- ☁️ Deployment using Streamlit Cloud
+
+---
+
+## 🎯 Use Cases
+
+Resume Lens can be useful for:
+
+- Recruiters
+- HR teams
+- Job seekers
+- Career coaches
+- Students
+- Data analysts
+- Developers
+- Small hiring teams
+
+Job seekers can also use it to identify **missing skills and areas to improve before applying**.
+
+---
+
+## 📚 Learning Outcomes
+
+This project demonstrates practical experience with:
+
+- Python
+- Streamlit
+- Generative AI
+- Google Gemini
+- LangChain
+- Prompt Engineering
+- API integration
+- PDF processing
+- DOCX processing
+- Environment variables
+- AI-assisted document analysis
+
+---
+
+## 👨‍💻 Author
+
+**Venkateswarlu**
+
+Aspiring Data Analyst | Python | SQL | Power BI | Generative AI
+
+---
+
+## ⭐ Support
+
+If you find this project useful, consider giving the repository a ⭐ on GitHub.

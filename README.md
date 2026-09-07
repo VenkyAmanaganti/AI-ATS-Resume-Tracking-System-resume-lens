@@ -79,10 +79,10 @@ Create a `.env` file in the project root:
 
 ```
 GOOGLE_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.6-flash
 ```
 
-`GEMINI_MODEL` is optional and defaults to `gemini-2.5-flash` if not set.
+`GEMINI_MODEL` is optional and defaults to `gemini-3.6-flash` if not set.
 
 ### Running the app
 
